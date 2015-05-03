@@ -203,8 +203,7 @@ class LSTMLayer : public ILayer<xpu> {
       }
       c = F<ZOp>(z) * F<IOp>(i) + last_c * F<FOp>(f);
       c_t = F<COp>(c);
-      y = F<COp>(c) * F<Oop>(o);
-      mshadow::Copy(next_y, y, next_y.steam_);
+      y = c_t * F<Oop>(o);
       mshadow::Copy(y_back, y, y_back.stream_);
     }
 
@@ -261,9 +260,6 @@ class LSTMLayer : public ILayer<xpu> {
         gbo_ += sum_rows(delta_o);
         gbf_ += sum_rows(delta_f);
         gbz_ += sum_rows(delta_z);
-      }
-      for (int i = 3; i < nodes_out.size(); ++i) {
-        mshadow::Copy(nodes_in[i]->data, nodes_out[i]->data, nodes_in[i]->data.stream_);
       }
     }
 
