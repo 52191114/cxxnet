@@ -137,6 +137,11 @@ struct LayerParam {
     }
   }
 };
+
+struct LSTMParam : public LayerParam {
+
+
+};
 }  // namespace layer
 }  // namespace cxxnet
 #endif   // CXXNET_LAYER_PARAM_H_

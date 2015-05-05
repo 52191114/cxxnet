@@ -30,8 +30,6 @@ class LSTMLayer : public ILayer<xpu> {
       // output: y_t, c_t, delta_z, delta_i, delta_o, delta_f, delta_c
       // state: z_no_act, i_no_act, f_no_act, o_no_act, c_t_no_act
       // Or we can save the act to speed up?
-      // dmlc::CHECK(nodes_in.size() == 7);
-      // dmlc::CHECK(nodes_out.size() == 7);
       const int batch_size = nodes_in[0]->data.shape_[0];
       mshadow::Shape<4> oshape = mshadow::Shape4(batch_size, 1, 1, param_.num_hidden);
       if (param_.num_input_node == 0) {
@@ -51,7 +49,7 @@ class LSTMLayer : public ILayer<xpu> {
     virtual void InitModel() {
       Wi_.Resize(mshadow::Shape2(param_.num_hidden, param_.num_input_node));
       Ui_.Resize(mshadow::Shape2(param_.num_hidden, param_.num_hidden));
-      bi_.Resize(mshadow::Shape2(param_.num_hidden));
+      bi_.Resize(mshadow::Shape1(param_.num_hidden));
       Wf_.Resize(Wi_.shape_);
       Uf_.Resize(Ui_.shape_);
       bf_.Resize(bi_.shape_);
@@ -101,7 +99,7 @@ class LSTMLayer : public ILayer<xpu> {
       bo_.SaveBinary(fo);
       bz_.SaveBinary(fo);
     }
-    virtal void LoadModel(utils::IStream &fi) {
+    virtual void LoadModel(utils::IStream &fi) {
       utils::Check(fi.Read(&param_, sizeof(LSTMParam)) != 0,
                    "FullConnectLayer:LoadModel invalid model file");
       Wi_.LoadBinary(fi);
@@ -119,15 +117,15 @@ class LSTMLayer : public ILayer<xpu> {
       gWi_.Resize(Wi_.shape_);
       gWf_.Resize(Wf_.shape_);
       gWo_.Resize(Wo_.shape_);
-      gWz_.Resize(Wc_.shape_);
+      gWz_.Resize(Wz_.shape_);
       gUi_.Resize(Wi_.shape_);
       gUf_.Resize(Wf_.shape_);
       gUo_.Resize(Wo_.shape_);
-      gUz_.Resize(Wc_.shape_);
+      gUz_.Resize(Wz_.shape_);
       gbi_.Resize(bi_.shape_);
       gbf_.Resize(bf_.shape_);
       gbo_.Resize(bo_.shape_);
-      gbz_.Resize(bc_.shape_);
+      gbz_.Resize(bz_.shape_);
       gWi_ = 0.0f;
       gUi_ = 0.0f;
       gbi_ = 0.0f;
@@ -203,7 +201,7 @@ class LSTMLayer : public ILayer<xpu> {
       }
       c = F<ZOp>(z) * F<IOp>(i) + last_c * F<FOp>(f);
       c_t = F<COp>(c);
-      y = c_t * F<Oop>(o);
+      y = c_t * F<OOp>(o);
       mshadow::Copy(y_back, y, y_back.stream_);
     }
 

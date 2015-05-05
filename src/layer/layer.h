@@ -312,6 +312,8 @@ const int kChConcat = 28;
 const int kPRelu = 29;
 const int kBatchNorm = 30;
 const int kFixConnect = 31;
+/*! \brief gap used to rnn */
+const int kLSTM = 100;
 /*! \brief gap used to encode pairtest layer */
 const int kPairTestGap = 1024;
 /*! \brief use integer to encode layer types */
@@ -349,6 +351,7 @@ inline LayerType GetLayerType(const char *type) {
   if (!strcmp(type, "ch_concat")) return kChConcat;
   if (!strcmp(type, "prelu")) return kPRelu;
   if (!strcmp(type, "batch_norm")) return kBatchNorm;
+  if (!strcmp(type, "lstm")) return kLSTM;
   #if CXXNET_USE_CAFFE_ADAPTOR
   if (!strcmp(type, "caffe")) return kCaffe;
   #endif
@@ -389,6 +392,8 @@ struct Connection {
   std::vector<Node<xpu>*> nodes_in;
   /*! \brief list of output nodes */
   std::vector<Node<xpu>*> nodes_out;
+  /*! \brief list of extra nodes */
+  std::vector<Node<xpu> > extra_nodes;
   /*!
    * \brief set the internal computation stream
    * \param stream the stream that was used for computation
@@ -403,6 +408,9 @@ struct Connection {
     }
     for (size_t i = 0; i < nodes_out.size(); ++i) {
       nodes_out[i]->data.set_stream(stream);
+    }
+    for (size_t i = 0; i < extra_nodes.size(); ++i) {
+      extra_nodes[i].data.set_stream(stream);
     }
   }
 };
