@@ -393,7 +393,7 @@ struct Connection {
   /*! \brief list of output nodes */
   std::vector<Node<xpu>*> nodes_out;
   /*! \brief list of extra nodes */
-  std::vector<Node<xpu> > extra_nodes;
+  std::vector<Node<xpu>*> extra_nodes;
   /*!
    * \brief set the internal computation stream
    * \param stream the stream that was used for computation
@@ -410,7 +410,7 @@ struct Connection {
       nodes_out[i]->data.set_stream(stream);
     }
     for (size_t i = 0; i < extra_nodes.size(); ++i) {
-      extra_nodes[i].data.set_stream(stream);
+      extra_nodes[i]->data.set_stream(stream);
     }
   }
 };

@@ -36,7 +36,7 @@ class LSTMLayer : public ILayer<xpu> {
         param_.num_input_node = static_cast<int>(nodes_in[0]->data.size(3));
       }
       for (int i = 0; i < nodes_out.size(); ++i) {
-        nodes_out[i]->shape_ = oshape;
+        if (nodes_out[i]) nodes_out[i]->shape_ = oshape;
       }
       p_cstate->states.resize(6);
       for (int i = 0; i < p_cstate->states.size(); ++i) {
