@@ -6,7 +6,7 @@
 #include "./nnet.h"
 #include "../utils/io.h"
 #include "../utils/metric.h"
-#include "./neural_net-inl.hpp"
+#include "./thread_neural_net-inl.hpp"
 
 #if MSHADOW_DIST_PS
 #include "gflags/gflags.h"
@@ -247,7 +247,7 @@ class CXXNetThreadTrainer : public INetTrainer {
     // safe guard for safely use allreduce in eval
     if (pserver != NULL) {
       pserver->SetParam("msg:disable_allreduce", "1");
-    }    
+    }
     std::string ret;
     if (eval_train != 0) {
       ret += train_metric.Print("train");

@@ -1,7 +1,7 @@
-#ifndef CXXNET_RECURRENT_NNET_NEURAL_NET_INL_HPP_
-#define CXXNET_RECURRENT_NNET_NEURAL_NET_INL_HPP_
+#ifndef LSTM_NEURAL_NET_INL_HPP_
+#define LSTM_NEURAL_NET_INL_HPP_
 /*!
- * \file neural_net-inl.hpp
+ * \file lstm-neural_net-inl.hpp
  * \brief implementation of common neuralnet
  * \author Bing Xu
  */
