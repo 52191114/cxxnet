@@ -28,6 +28,7 @@
 #include "./loss/softmax_layer-inl.hpp"
 #include "./loss/lp_loss_layer-inl.hpp"
 #include "./loss/multi_logistic_layer-inl.hpp"
+#include "./lstm_layer-inl.hpp"
 #if CXXNET_USE_CAFFE_ADAPTOR
 #include "../plugin/caffe_adapter-inl.hpp"
 #endif
